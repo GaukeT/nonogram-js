@@ -99,20 +99,20 @@ class Game {
         }
 
         fill(0);
-        textSize(20);
+        textSize(this.offset * 0.42);
         for(let i = 0; i < this.rows.length; i++) {
-            let pos = 470;
+            let pos = this.width + this.offset * 0.4;
             for(let j = 0; j < this.rows[i].length; j++) {
-            text(this.rows[i][j], pos, i * this.offset + (this.offset * 0.7));
-                pos += 25;
+                text(this.rows[i][j], pos, i * this.offset + (this.offset * 0.7));
+                pos += this.offset * 0.55;
             }
         }
 
         for(let i = 0; i < this.cols.length; i++) {
-            let pos = 480;
+            let pos = this.width + this.offset * 0.6;
             for(let j = 0; j < this.cols[i].length; j++) {
                 text(this.cols[i][j], i * this.offset + (this.offset * 0.4), pos);
-                pos += 30;
+                pos += this.offset * 0.65;
             }
         }
 
@@ -133,20 +133,17 @@ class Game {
         let mX = floor(mouseX / game.offset);
 
         if (mY >= 0 && mX >= 0) {
-          game.clicked(mY, mX, mouseButton);
+          game.clicked(mY, mX);
         }
       }
     }
 
-    clicked(y, x, button) {
-      if (button === LEFT) {
-        // fill
+    clicked(y, x) {
+      if (currentMode === 'fill') {
         this.setVal(y, x, 0);
-      } else if (button === RIGHT) {
-        // empty
+      } else if (currentMode === 'empty') {
         this.setVal(y, x, 1);
-      } else if (button === CENTER) {
-        // mark spot
+      } else if (currentMode === 'mark') {
         this.setVal(y, x, -1);
       }
     }

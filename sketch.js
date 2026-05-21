@@ -1,55 +1,58 @@
 const DEBUG = false;
 
-let resetButton;
-let solveButton;
-
 let boardWidth = 450;
 let game;
 
-function setup() {
-  for (let element of document.getElementsByClassName("p5Canvas")) {
-    element.addEventListener("contextmenu", (e) => e.preventDefault());
-  }
+let currentMode = 'fill';
 
-  var cnv = createCanvas(600, 600);
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('btn-' + mode).classList.add('active');
+}
+
+function calcCanvasSize() {
+  const padding = 48;
+  const uiHeight = 160; // header + buttons + margins
+  const size = min(windowWidth - padding, windowHeight - uiHeight, 600);
+  return max(size, 200);
+}
+
+function setup() {
+  const canvasSize = calcCanvasSize();
+  boardWidth = floor(canvasSize * 0.75);
+
+  var cnv = createCanvas(canvasSize, canvasSize);
   cnv.parent('cnv-div');
 
-//  setupResetButton();
-//  setupSolveButton();
+  // Prevent scroll/zoom only when touching the canvas, not the buttons
+  cnv.elt.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+  cnv.elt.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+  cnv.elt.addEventListener('contextmenu', (e) => e.preventDefault());
 
   game = new Game(boardWidth);
 }
 
 function draw() {
-    background(255);
-    game.draw();
+  background(255);
+  game.draw();
 
-    if (mouseIsPressed) {
-        game.handleMousePressed();
-    }
+  if (mouseIsPressed) {
+    game.handleMousePressed();
+  }
 }
 
-function styleButton(button) {
-  button.style('border', 'none');
-  button.style('padding', '6px 10px');
-  button.style('border-radius', '6px');
-  button.style('transition-duration', '0.4s');
+function windowResized() {
+  const canvasSize = calcCanvasSize();
+  boardWidth = floor(canvasSize * 0.75);
+  resizeCanvas(canvasSize, canvasSize);
+  game = new Game(boardWidth);
 }
 
-function setupResetButton() {
-  resetButton = createButton('Reset');
-  resetButton.position(10, 550);
-  resetButton.mousePressed(resetBoard);
-  styleButton(resetButton);
+function touchStarted() {
+  // handled per-element above; no global prevention
 }
 
-function resetBoard() {
-  game.initBoard();
-}
-
-function setupSolveButton() {
-  solveButton = createButton('Solve');
-  solveButton.position(80, 550);
-  solveButton.mousePressed(solveSudoku);
-  styleButton(solveButton);
+function touchMoved() {
+  // handled per-element above; no global prevention
 }

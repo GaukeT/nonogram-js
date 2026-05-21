@@ -5,22 +5,29 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
     <script src="game.js"></script>
     <script src="spot.js"></script>
     <script src="sketch.js"></script>
-    <div class="header">
-      <h1>Nonogram</h1>
-      <i class="fa fa-question-circle-o">
-        <span class="tooltip">
-          left click: fill <br>
-          right click: empty <br>
-          scroll click: mark <br>
-        </span>
-      </i>
-
+    <div class="game">
+      <div class="header game">
+        <h1>Nonogram</h1>
+        <i class="fa fa-question-circle-o">
+          <span class="tooltip">
+            Select a mode below, <br>
+            then left click a cell <br>
+            to apply it.
+          </span>
+        </i>
+      </div>
+      <div class="mode-buttons game">
+        <button class="mode-btn active" onclick="setMode('fill')" id="btn-fill"><i class="fa fa-pencil"></i> Fill</button>
+        <button class="mode-btn" onclick="setMode('empty')" id="btn-empty"><i class="fa fa-eraser"></i> Empty</button>
+        <button class="mode-btn" onclick="setMode('mark')" id="btn-mark"><i class="fa fa-flag"></i> Mark</button>
+      </div>
+      <div id="cnv-div"></div>
     </div>
-    <div id="cnv-div"></div>
   </body>
 </html>

@@ -37,6 +37,11 @@ function draw() {
   background(255);
   game.draw();
 
+  // Show pointer cursor when hovering over hint areas
+  const inRowHint = mouseX > boardWidth && mouseY >= 0 && mouseY < boardWidth;
+  const inColHint = mouseY > boardWidth && mouseX >= 0 && mouseX < boardWidth;
+  cursor(inRowHint || inColHint ? HAND : ARROW);
+
   if (mouseIsPressed) {
     game.handleMousePressed();
   }
@@ -47,6 +52,16 @@ function windowResized() {
   boardWidth = floor(canvasSize * 0.75);
   resizeCanvas(canvasSize, canvasSize);
   game = new Game(boardWidth);
+}
+
+function mouseReleased() {
+  if (game) game.resetClickState();
+}
+
+function mousePressed() {
+  if (game) {
+    game.handleHintClick(mouseX, mouseY);
+  }
 }
 
 function touchStarted() {

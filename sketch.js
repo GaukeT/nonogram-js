@@ -18,7 +18,7 @@ function calcCanvasSize() {
 
 function setup() {
   const canvasSize = calcCanvasSize();
-  boardWidth = floor(canvasSize * 0.75);
+  boardWidth = floor(canvasSize * 0.79);
 
   var cnv = createCanvas(canvasSize, canvasSize);
   cnv.parent('cnv-div');

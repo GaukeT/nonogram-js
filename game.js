@@ -1,5 +1,4 @@
 class Game {
-    initLoaded = false;
     size = 10;
     board;
     width;
@@ -25,21 +24,54 @@ class Game {
         this.initBoard();
     }
 
+    // Constraints — easy to tune when adding size selection later:
+    // minGroups / maxGroups scale with board size so a 5×5 or 15×15 still works.
+    get minGroups() { return 2; }
+    get maxGroups() { return Math.max(4, Math.floor(this.size / 2.5)); }
+
     initBoard() {
-        // board[y-axis][x-axis]
-        for (let y = 0; y < this.size; y++) {
-            let row = [this.size];
-            for (let x = 0; x < this.size; x++) {
-                let isFilled = random(1) < 0.50;
-                row[x] = new Spot(y, x, 1, this.offset, isFilled);
-             }
-            this.board[y] = row;
-        }
-        // determine hints
-        this.countRows();
-        this.countCols();
+        let attempts = 0;
+        do {
+            attempts++;
+            this.rows = [];
+            this.cols = [];
+
+            // board[y-axis][x-axis]
+            for (let y = 0; y < this.size; y++) {
+                let row = [];
+                for (let x = 0; x < this.size; x++) {
+                    row[x] = new Spot(y, x, 1, this.offset, random(1) < 0.50);
+                }
+                this.board[y] = row;
+            }
+
+            this.countRows();
+            this.countCols();
+        } while (!this.isValidBoard());
+
+        // console.log("attempts: ", attempts)
         this.rowsComplete = this.rows.map(r => new Array(r.length).fill(false));
         this.colsComplete = this.cols.map(c => new Array(c.length).fill(false));
+    }
+
+    // Returns true when every row and column passes all constraints.
+    isValidBoard() {
+        for (let i = 0; i < this.size; i++) {
+            const rg = this.rows[i].length;
+            const cg = this.cols[i].length;
+
+            // 2–maxGroups hint groups per line (also rules out empty and fully-filled lines)
+            if (rg < this.minGroups || rg > this.maxGroups) return false;
+            if (cg < this.minGroups || cg > this.maxGroups) return false;
+
+            // No row or column that is completely filled
+            // (a single group equal to size would pass group count only if maxGroups >= 1,
+            //  but minGroups=2 already blocks it; kept explicit for clarity)
+            const rowFilled = this.rows[i].reduce((s, v) => s + v, 0);
+            const colFilled = this.cols[i].reduce((s, v) => s + v, 0);
+            if (rowFilled === this.size || colFilled === this.size) return false;
+        }
+        return true;
     }
 
     countRows() {

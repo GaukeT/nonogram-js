@@ -54,12 +54,19 @@ class Game {
             this.cols = [];
 
             // board[y-axis][x-axis]
+            // _randomValidRow guarantees each row already satisfies minGroups/maxGroups,
+            // so only column checks and uniqueness can still fail — far fewer retries.
             for (let y = 0; y < this.size; y++) {
+                const rowData = _randomValidRow(this.size, this.minGroups, this.maxGroups);
                 let row = [];
                 for (let x = 0; x < this.size; x++) {
-                    row[x] = new Spot(y, x, VAL_EMPTY, this.offset, random(1) < 0.50);
+                    row[x] = new Spot(y, x, VAL_EMPTY, this.offset, rowData ? rowData[x] : random(1) < 0.5);
                 }
                 this.board[y] = row;
+            }
+
+            if (DEBUG) {
+                console.log(`Attempt ${attempts}`);
             }
 
             this.countRows();
@@ -67,11 +74,6 @@ class Game {
         } while (!this.isValidBoard());
 
         this.lastClickedCell = null;
-        if (typeof validating !== 'undefined') {
-            validating = false;
-            const btn = document.getElementById('btn-validate');
-            if (btn) btn.classList.remove('active');
-        }
         this.rowsComplete = this.rows.map(r => new Array(r.length).fill(false));
         this.colsComplete = this.cols.map(c => new Array(c.length).fill(false));
     }
@@ -87,13 +89,17 @@ class Game {
             if (cg < this.minGroups || cg > this.maxGroups) return false;
 
             // No row or column that is completely filled
-            // (a single group equal to size would pass group count only if maxGroups >= 1,
-            //  but minGroups=2 already blocks it; kept explicit for clarity)
             const rowFilled = this.rows[i].reduce((s, v) => s + v, 0);
             const colFilled = this.cols[i].reduce((s, v) => s + v, 0);
             if (rowFilled === this.size || colFilled === this.size) return false;
         }
-        return true;
+
+        // Uniqueness check: only accept puzzles with exactly one solution.
+        // -1 means the solver hit the node limit — accept as fallback so generation
+        // doesn't loop forever on complex boards.
+        const solutions = countNonogramSolutions(this.rows, this.cols);
+        if (DEBUG) console.log('solutions:', solutions);
+        return solutions === 1 || solutions === -1;
     }
 
     countRows() {
@@ -147,7 +153,7 @@ class Game {
             for (let x = 0; x < this.size; x++) {
               this.board[y][x].show();
 
-              if (DEBUG == true) {
+              if (DEBUG) {
                   this.board[y][x].showIndexes();
               }
             }

@@ -41,7 +41,7 @@ function setup() {
   const canvasSize = calcCanvasSize();
   boardWidth = floor(canvasSize * boardRatio());
 
-  var cnv = createCanvas(canvasSize, canvasSize);
+  let cnv = createCanvas(canvasSize, canvasSize);
   cnv.parent('cnv-div');
 
   // Prevent scroll/zoom only when touching the canvas, not the buttons

@@ -43,6 +43,20 @@ class Spot {
         square(this.x + o, this.y + o, this.offset - (2*o));
       }
 
+      // validation overlay
+      if (typeof validating !== 'undefined' && validating) {
+        if (this.val === 0) {
+          // player filled: green if correct, red if wrong
+          fill(this.filled ? color(0, 180, 0, 110) : color(220, 0, 0, 110));
+          square(this.x + o, this.y + o, this.offset - (2*o));
+        } else if (this.filled) {
+          // player didn't fill but should have: red
+          fill(220, 0, 0, 110);
+          square(this.x + o, this.y + o, this.offset - (2*o));
+        }
+        // not filled + should be empty/marked: no tint
+      }
+
       pop();
     }
 

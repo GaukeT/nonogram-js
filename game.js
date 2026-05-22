@@ -61,7 +61,12 @@ class Game {
             this.countCols();
         } while (!this.isValidBoard());
 
-        // console.log("attempts: ", attempts)
+        this.lastClickedCell = null;
+        if (typeof validating !== 'undefined') {
+            validating = false;
+            const btn = document.getElementById('btn-validate');
+            if (btn) btn.classList.remove('active');
+        }
         this.rowsComplete = this.rows.map(r => new Array(r.length).fill(false));
         this.colsComplete = this.cols.map(c => new Array(c.length).fill(false));
     }
@@ -248,12 +253,24 @@ class Game {
 
     clicked(y, x) {
       if (currentMode === 'fill') {
-        // toggle: filled → empty, anything else → filled
         this.setVal(y, x, this.getVal(y, x) === 0 ? 1 : 0);
       } else if (currentMode === 'mark') {
-        // toggle: marked → empty, anything else → marked
         this.setVal(y, x, this.getVal(y, x) === -1 ? 1 : -1);
       }
+      if (this.isBoardComplete()) {
+        validating = true;
+        document.getElementById('btn-validate').classList.add('active');
+      }
+    }
+
+    // Returns true when every cell has been filled or marked (none left empty).
+    isBoardComplete() {
+      for (let y = 0; y < this.size; y++) {
+        for (let x = 0; x < this.size; x++) {
+          if (this.board[y][x].getVal() === 1) return false; // still empty
+        }
+      }
+      return true;
     }
 
     getVal(y, x) {

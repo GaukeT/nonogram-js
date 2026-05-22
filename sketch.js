@@ -5,6 +5,7 @@ let game;
 
 let currentMode = 'fill';
 let currentGridSize = 10;
+let validating = false;
 
 function setMode(mode) {
   currentMode = mode;
@@ -12,8 +13,16 @@ function setMode(mode) {
   document.getElementById('btn-' + mode).classList.add('active');
 }
 
+function toggleValidate() {
+  validating = !validating;
+  const btn = document.getElementById('btn-validate');
+  btn.classList.toggle('active', validating);
+}
+
 function setGridSize(size) {
   currentGridSize = size;
+  validating = false;
+  document.getElementById('btn-validate').classList.remove('active');
   document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('btn-size-' + size).classList.add('active');
   const canvasSize = calcCanvasSize();

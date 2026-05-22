@@ -101,6 +101,29 @@ h1 {
   border-color: #333;
 }
 
+.validate-btn {
+  padding: 10px 14px;
+  border: 1px solid #4a9960;
+  border-radius: 6px;
+  background: #f0faf3;
+  color: #2d7a47;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s, border-color 0.2s;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.validate-btn:hover {
+  background: #d6f5e3;
+}
+
+.validate-btn.active {
+  background: #2d7a47;
+  color: #fff;
+  border-color: #2d7a47;
+}
+
 .size-buttons {
   display: flex;
   gap: 6px;

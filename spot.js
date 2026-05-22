@@ -36,6 +36,13 @@ class Spot {
         fill(200,0,0);
         circle(this.x + this.offset / 2, this.y + this.offset / 2, 5);
       }
+
+      // debug: overlay solution hint
+      if (typeof DEBUG !== 'undefined' && DEBUG && this.filled) {
+        fill(0, 120, 255, 60);
+        square(this.x + o, this.y + o, this.offset - (2*o));
+      }
+
       pop();
     }
 

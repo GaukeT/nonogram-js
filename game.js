@@ -25,17 +25,6 @@ class Game {
         this.initBoard();
     }
 
-//    initBoard() {
-//        // board[y-axis][x-axis]
-//        for (let y = 0; y < this.size; y++) {
-//            let row = [this.size];
-//            for (let x = 0; x < this.size; x++) {
-//                row[x] = new Spot(y, x, 1, this.offset);
-//             }
-//            this.board[y] = row;
-//        }
-//    }
-
     initBoard() {
         // board[y-axis][x-axis]
         for (let y = 0; y < this.size; y++) {
@@ -47,10 +36,6 @@ class Game {
             this.board[y] = row;
         }
         // determine hints
-        this.countRows();
-        this.countCols();
-        this.rows = [];
-        this.cols = [];
         this.countRows();
         this.countCols();
         this.rowsComplete = this.rows.map(r => new Array(r.length).fill(false));

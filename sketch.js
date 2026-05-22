@@ -1,4 +1,4 @@
-const DEBUG = false;
+let DEBUG = false;
 
 let boardWidth = 450;
 let game;
@@ -12,10 +12,8 @@ function setMode(mode) {
 }
 
 function calcCanvasSize() {
-  const padding = 48;
-  const uiHeight = 160; // header + buttons + margins
-  const size = min(windowWidth - padding, windowHeight - uiHeight, 600);
-  return max(size, 200);
+  const el = document.getElementById('cnv-div');
+  return max(el ? el.clientWidth : 400, 200);
 }
 
 function setup() {

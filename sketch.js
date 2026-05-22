@@ -49,6 +49,9 @@ function setup() {
   cnv.elt.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
   cnv.elt.addEventListener('contextmenu', (e) => e.preventDefault());
 
+  if (validating) {
+    toggleValidate()
+  }
   game = new Game(boardWidth, currentGridSize);
 }
 
@@ -70,6 +73,9 @@ function windowResized() {
   const canvasSize = calcCanvasSize();
   boardWidth = floor(canvasSize * boardRatio());
   resizeCanvas(canvasSize, canvasSize);
+  if (validating) {
+    this.toggleValidate()
+  }
   game = new Game(boardWidth, currentGridSize);
 }
 

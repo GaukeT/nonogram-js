@@ -14,7 +14,6 @@ class Spot {
       this.x = x * this.offset;
       this.val = val;
       this.filled = filled;
-
       this.indexY = y;
       this.indexX = x;
     }
@@ -29,7 +28,7 @@ class Spot {
       noStroke();
 
       let o = this.offset * 0.1;
-      if (this.val >= 0) {
+      if (this.val >= VAL_FILLED) {
         fill(255 * this.val);
         square(this.x + o, this.y + o, this.offset - (2*o));
       } else {
@@ -45,7 +44,7 @@ class Spot {
 
       // validation overlay
       if (typeof validating !== 'undefined' && validating) {
-        if (this.val === 0) {
+        if (this.val === VAL_FILLED) {
           // player filled: green if correct, red if wrong
           fill(this.filled ? color(0, 180, 0, 110) : color(220, 0, 0, 110));
           square(this.x + o, this.y + o, this.offset - (2*o));
@@ -67,19 +66,11 @@ class Spot {
       text('y:' +  this.indexY + ' | x:' + this.indexX, this.x + this.offset * 0.5, this.y + this.offset * 0.95);
     }
 
-    clicked(markSpot) {
-      if (this.val === 1) this.val = 0;
-      else this.val = 1;
-
-      this.show();
-    }
-
     getVal() {
         return this.val;
     }
 
     setVal(newVal) {
-        // TODO: validation newVal between 0 and 1;
         if (this.val !== newVal) {
             this.val = newVal;
         }

@@ -21,13 +21,15 @@ function toggleValidate() {
 
 function setGridSize(size) {
   currentGridSize = size;
-  validating = false;
-  document.getElementById('btn-validate').classList.remove('active');
   document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('btn-size-' + size).classList.add('active');
-  const canvasSize = calcCanvasSize();
-  boardWidth = floor(canvasSize * 0.75);
-  game = new Game(boardWidth, currentGridSize);
+  // Wait one frame for the DOM to reflow, then resize canvas + new game
+  setTimeout(() => windowResized(), 50);
+}
+
+function boardRatio() {
+  // Linear interpolation: size 6 → 0.75, size 15 → 0.82
+  return 0.75 + (currentGridSize - 6) * (0.82 - 0.75) / (15 - 6);
 }
 
 function calcCanvasSize() {
@@ -37,7 +39,7 @@ function calcCanvasSize() {
 
 function setup() {
   const canvasSize = calcCanvasSize();
-  boardWidth = floor(canvasSize * 0.79);
+  boardWidth = floor(canvasSize * boardRatio());
 
   var cnv = createCanvas(canvasSize, canvasSize);
   cnv.parent('cnv-div');
@@ -66,7 +68,7 @@ function draw() {
 
 function windowResized() {
   const canvasSize = calcCanvasSize();
-  boardWidth = floor(canvasSize * 0.75);
+  boardWidth = floor(canvasSize * boardRatio());
   resizeCanvas(canvasSize, canvasSize);
   game = new Game(boardWidth, currentGridSize);
 }

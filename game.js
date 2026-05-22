@@ -1,3 +1,8 @@
+// Cell state constants
+const VAL_FILLED = 0;   // player filled the cell (black)
+const VAL_EMPTY  = 1;   // cell is empty (white)
+const VAL_MARKED = -1;  // player marked the cell (red dot)
+
 // Supported grid sizes and their bold-line block size.
 // blockSize drives drawBoldLines() — no hardcoded numbers anywhere else.
 const GRID_PRESETS = {
@@ -39,7 +44,7 @@ class Game {
     // Constraints — easy to tune when adding size selection later:
     // minGroups / maxGroups scale with board size so a 5×5 or 15×15 still works.
     get minGroups() { return 2; }
-    get maxGroups() { return Math.max(4, Math.floor(this.size / 2.5)); }
+    get maxGroups() { return Math.min(5, Math.max(4, Math.floor(this.size / 2.5))); }
 
     initBoard() {
         let attempts = 0;
@@ -52,7 +57,7 @@ class Game {
             for (let y = 0; y < this.size; y++) {
                 let row = [];
                 for (let x = 0; x < this.size; x++) {
-                    row[x] = new Spot(y, x, 1, this.offset, random(1) < 0.50);
+                    row[x] = new Spot(y, x, VAL_EMPTY, this.offset, random(1) < 0.50);
                 }
                 this.board[y] = row;
             }
@@ -141,7 +146,10 @@ class Game {
         for (let y = 0; y < this.size; y++) {
             for (let x = 0; x < this.size; x++) {
               this.board[y][x].show();
-              //this.board[y][x].showIndexes();
+
+              if (DEBUG == true) {
+                  this.board[y][x].showIndexes();
+              }
             }
         }
 
@@ -253,9 +261,9 @@ class Game {
 
     clicked(y, x) {
       if (currentMode === 'fill') {
-        this.setVal(y, x, this.getVal(y, x) === 0 ? 1 : 0);
+        this.setVal(y, x, this.getVal(y, x) === VAL_FILLED ? VAL_EMPTY : VAL_FILLED);
       } else if (currentMode === 'mark') {
-        this.setVal(y, x, this.getVal(y, x) === -1 ? 1 : -1);
+        this.setVal(y, x, this.getVal(y, x) === VAL_MARKED ? VAL_EMPTY : VAL_MARKED);
       }
       if (this.isBoardComplete()) {
         validating = true;
@@ -267,7 +275,7 @@ class Game {
     isBoardComplete() {
       for (let y = 0; y < this.size; y++) {
         for (let x = 0; x < this.size; x++) {
-          if (this.board[y][x].getVal() === 1) return false; // still empty
+          if (this.board[y][x].getVal() === VAL_EMPTY) return false;
         }
       }
       return true;

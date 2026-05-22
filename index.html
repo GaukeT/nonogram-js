@@ -15,17 +15,20 @@
       <div class="header game">
         <h1>Nonogram</h1>
       </div>
+      <details class="size-collapsible">
+        <summary>Grid size</summary>
+        <div class="size-buttons">
+          <button class="size-btn" onclick="setGridSize(6)"  id="btn-size-6">6×6</button>
+          <button class="size-btn" onclick="setGridSize(8)"  id="btn-size-8">8×8</button>
+          <button class="size-btn active" onclick="setGridSize(10)" id="btn-size-10">10×10</button>
+          <button class="size-btn" onclick="setGridSize(12)" id="btn-size-12">12×12</button>
+          <button class="size-btn" onclick="setGridSize(15)" id="btn-size-15">15×15</button>
+        </div>
+      </details>
       <div class="mode-buttons game">
         <button class="mode-btn active" onclick="setMode('fill')" id="btn-fill"><i class="fa fa-pencil"></i> Fill</button>
         <button class="mode-btn" onclick="setMode('mark')" id="btn-mark"><i class="fa fa-flag"></i> Mark</button>
         <button class="validate-btn" onclick="toggleValidate()" id="btn-validate"><i class="fa fa-check"></i> Check</button>
-      </div>
-      <div class="size-buttons">
-        <button class="size-btn" onclick="setGridSize(6)"  id="btn-size-6">6×6</button>
-        <button class="size-btn" onclick="setGridSize(8)"  id="btn-size-8">8×8</button>
-        <button class="size-btn active" onclick="setGridSize(10)" id="btn-size-10">10×10</button>
-        <button class="size-btn" onclick="setGridSize(12)" id="btn-size-12">12×12</button>
-        <button class="size-btn" onclick="setGridSize(15)" id="btn-size-15">15×15</button>
       </div>
       <div id="cnv-div"></div>
     </div>

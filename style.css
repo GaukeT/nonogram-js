@@ -27,6 +27,7 @@ body {
 .header {
   display: flex;
   justify-content: center;
+  margin-bottom: 12px;
 }
 
 h1 {
@@ -39,26 +40,6 @@ h1 {
   cursor: pointer;
   color: #888;
   padding: 8px; /* larger touch target */
-}
-
-.header i .tooltip {
-  visibility: hidden;
-  width: 160px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 6px 8px;
-  position: absolute;
-  left: 24px;
-  top: -4px;
-  z-index: 1;
-  font-size: 0.8rem;
-  line-height: 1.6;
-}
-
-.header i:hover .tooltip {
-  visibility: visible;
 }
 
 #cnv-div {
@@ -75,7 +56,6 @@ h1 {
 .mode-buttons {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
   margin-bottom: 12px;
 }
 
@@ -124,11 +104,46 @@ h1 {
   border-color: #2d7a47;
 }
 
+.size-collapsible {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.size-collapsible summary {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #555;
+  user-select: none;
+  list-style: none; /* hide default arrow in Safari */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.size-collapsible summary::-webkit-details-marker { display: none; }
+
+.size-collapsible summary::before {
+  content: '▶';
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+}
+
+.size-collapsible[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.size-collapsible summary:hover {
+  background: #f5f5f5;
+}
+
 .size-buttons {
   display: flex;
   gap: 6px;
-  margin-bottom: 10px;
-  flex-wrap: wrap; /* wraps on very small screens */
+  padding: 8px;
+  flex-wrap: wrap;
 }
 
 .size-btn {

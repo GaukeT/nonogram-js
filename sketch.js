@@ -4,11 +4,21 @@ let boardWidth = 450;
 let game;
 
 let currentMode = 'fill';
+let currentGridSize = 10;
 
 function setMode(mode) {
   currentMode = mode;
   document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('btn-' + mode).classList.add('active');
+}
+
+function setGridSize(size) {
+  currentGridSize = size;
+  document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('btn-size-' + size).classList.add('active');
+  const canvasSize = calcCanvasSize();
+  boardWidth = floor(canvasSize * 0.75);
+  game = new Game(boardWidth, currentGridSize);
 }
 
 function calcCanvasSize() {
@@ -28,7 +38,7 @@ function setup() {
   cnv.elt.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
   cnv.elt.addEventListener('contextmenu', (e) => e.preventDefault());
 
-  game = new Game(boardWidth);
+  game = new Game(boardWidth, currentGridSize);
 }
 
 function draw() {
@@ -49,7 +59,7 @@ function windowResized() {
   const canvasSize = calcCanvasSize();
   boardWidth = floor(canvasSize * 0.75);
   resizeCanvas(canvasSize, canvasSize);
-  game = new Game(boardWidth);
+  game = new Game(boardWidth, currentGridSize);
 }
 
 function mouseReleased() {

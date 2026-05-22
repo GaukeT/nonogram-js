@@ -1,5 +1,16 @@
+// Supported grid sizes and their bold-line block size.
+// blockSize drives drawBoldLines() — no hardcoded numbers anywhere else.
+const GRID_PRESETS = {
+    6:  { blockSize: 3  },   // 2×2 of 3×3
+    8:  { blockSize: 4  },   // 2×2 of 4×4
+    10: { blockSize: 5  },   // 2×2 of 5×5
+    12: { blockSize: 4  },   // 3×3 of 4×4
+    15: { blockSize: 5  },   // 3×3 of 5×5
+};
+
 class Game {
-    size = 10;
+    size;
+    blockSize;
     board;
     width;
     offset;
@@ -15,9 +26,10 @@ class Game {
     // prevent re-toggling the same cell during a drag
     lastClickedCell = null;
 
-    constructor(boardWidth) {
-        // board[y-axis]
-        this.board = [this.size];
+    constructor(boardWidth, size = 10) {
+        this.size = size;
+        this.blockSize = (GRID_PRESETS[size] ?? { blockSize: size }).blockSize;
+        this.board = [];
 
         this.width = boardWidth;
         this.offset = this.width / this.size;
@@ -181,8 +193,11 @@ class Game {
     drawBoldLines() {
       push();
       strokeWeight(2.5);
-      line(0, 5 * this.offset, this.width, 5 * this.offset);
-      line(5 * this.offset, 0, 5 * this.offset, this.width);
+      // draw a divider every blockSize cells; skip the outer border (i < size)
+      for (let i = this.blockSize; i < this.size; i += this.blockSize) {
+        line(0, i * this.offset, this.width, i * this.offset); // horizontal
+        line(i * this.offset, 0, i * this.offset, this.width); // vertical
+      }
       pop();
     }
 
